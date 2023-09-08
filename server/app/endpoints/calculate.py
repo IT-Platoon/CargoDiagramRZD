@@ -1,8 +1,8 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Body, Request, status, Response
+from fastapi import APIRouter, Body, Request, status
 
-from app.schemas import CalculateRequest
+from app.schemas import CalculateRequest, CalculateResponse
 from app.utils.calculate import calculate_centers_of_mass, get_report
 
 
@@ -14,6 +14,7 @@ api_router = APIRouter(
 
 @api_router.post(
     "",
+    response_model=CalculateResponse,
     status_code=status.HTTP_200_OK,
 )
 async def run_calculate(
@@ -21,5 +22,5 @@ async def run_calculate(
     body: Annotated[CalculateRequest, Body(...)]
 ):
     result = await calculate_centers_of_mass(body)
-    response = await get_report(body, result)
-    return response
+    report = await get_report(body, result)
+    return CalculateResponse(result=result, report=report).json()

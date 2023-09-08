@@ -16,3 +16,8 @@ class CalculateRequest(BaseModel):
     height_center_gravity_from_level_rail_heads: int
     platform_base: int
     cargo: list[CargoItem]
+
+
+class CalculateResponse(BaseModel):
+    result: dict
+    report: str
