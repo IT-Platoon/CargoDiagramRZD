@@ -44,6 +44,7 @@ services:
       - ./server/:/server/
     environment:
       - APP_PORT=${APP_PORT}
+      - PATH_PREFIX=${PATH_PREFIX}
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
