@@ -4,20 +4,20 @@ from pydantic import BaseModel, Field
 
 
 class CargoItem(BaseModel):
-    length: int
-    width: int
-    height: int
+    length: float
+    width: float
+    height: float
     quantity: int
-    weight: int
-    delta: Optional[int]
+    weight: float
+    delta: Optional[float]
 
 
 class CalculateRequest(BaseModel):
-    floor_length: int = Field(default=13400)
-    tare_weight: int = Field(default=21)
-    floor_height_from_level_rail_heads: int = Field(default=1310)
-    height_center_gravity_from_level_rail_heads: int = Field(default=800)
-    platform_base: int = Field(default=9720)
+    floor_length: float = Field(default=13400)
+    tare_weight: float = Field(default=21)
+    floor_height_from_level_rail_heads: float = Field(default=1310)
+    height_center_gravity_from_level_rail_heads: float = Field(default=800)
+    platform_base: float = Field(default=9720)
     cargo: list[CargoItem]
 
 
