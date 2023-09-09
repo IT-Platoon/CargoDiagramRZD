@@ -65,7 +65,8 @@ calcButton.addEventListener('click', async () => {
       console.error(e);
     }
 
-    if (result?.result == undefined) {
+    if (result?.result == undefined || result?.result?.error != undefined) {
+      console.error(result)
       return;
     }
 
@@ -104,7 +105,7 @@ cargoAdd.addEventListener('click', async () => {
     }
     cargoArray.push(obj)
     const item = document.createElement("li")
-    const info = `Длина ${obj.length}; Ширина ${obj.width}; Высота ${obj.height}; Вес одного ${obj.weight}; Количество ${obj.quantity};`
+    const info = `Длина ${obj.length} мм; Ширина ${obj.width} мм; Высота ${obj.height} мм; Вес одного ${obj.weight} кг; Количество ${obj.quantity} шт;`
     item.appendChild(document.createTextNode(info))
     cargoList.appendChild(item)
 

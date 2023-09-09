@@ -22,5 +22,5 @@ class CalculateRequest(BaseModel):
 
 
 class CalculateResponse(BaseModel):
-    result: dict[str, float]
-    report: str
+    result: dict[str, float | list]
+    report: Optional[str]
