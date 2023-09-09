@@ -5,25 +5,12 @@ CargoDiagramRZD
 Необходимо, чтобы были установлены следующие компоненты:
 
 - `Docker` и `docker-compose`
-- `Poetry`
 
 ### Запуск
 
 1. Запуск приложения:
 ```commandline
 make docker-run
-```
-
-### Тестирование
-
-- Запуск тестов со всеми необходимыми флагами:
-```commandline
-make test-docker
-```
-
-- Запуск тестов с генерацией отчета о покрытии:
-```commandline
-make test-cov-docker
 ```
 
 ### Статический анализ
@@ -39,15 +26,6 @@ make format
 ```
 
 ### Дополнительные команды
-
-- Создание новой ревизии:
-```commandline
-make revision
-```
-- Открытие базы данных внутри Docker-контейнера:
-```commandline
-make open-db
-```
 
 - Открытие контейнера внутри Docker-контейнера:
 ```commandline
