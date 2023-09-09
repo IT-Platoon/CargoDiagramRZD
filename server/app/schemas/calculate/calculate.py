@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 
@@ -7,9 +9,7 @@ class CargoItem(BaseModel):
     height: int
     quantity: int
     weight: int
-    coordinate_center_gravity_load_relative_end_board: int
-
-    center_gravity: int
+    center_gravity: Optional[int]
     coordinate_center_gravity_load_relative_end_board: int
 
 
@@ -23,5 +23,5 @@ class CalculateRequest(BaseModel):
 
 
 class CalculateResponse(BaseModel):
-    result: dict
+    result: dict[str, float]
     report: str

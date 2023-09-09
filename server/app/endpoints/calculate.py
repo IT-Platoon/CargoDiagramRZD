@@ -22,5 +22,5 @@ async def run_calculate(
     body: Annotated[CalculateRequest, Body(...)]
 ):
     result = await calculate_centers_of_mass(body)
-    report = await get_report(body, result)
-    return CalculateResponse(result=result, report=report).json()
+    report = await get_report(result)
+    return CalculateResponse(result=result, report=report).dict()
