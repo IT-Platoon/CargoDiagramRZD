@@ -1,23 +1,39 @@
 from app.schemas import CalculateRequest
 from model import Optimize
+import copy
 
 
 async def calculate_centers_of_mass(body: CalculateRequest) -> dict:
-    
+
+    # Изменение кол-ва груза из-за поля quantity.
+    update_count_cargo = []
+    for item in body.cargo:
+        for _ in range(item.quantity):
+            tmp_cargo = copy.deepcopy(item)
+            tmp_cargo.quantity = 1
+            update_count_cargo.append(tmp_cargo)
+    body.cargo = update_count_cargo
+
     # Свободное место на платформе, если расположить все грузы.
     free_L = body.floor_length - sum([item.length for item in body.cargo])
-    # Даём пустое пространство на один груз, где можем его двигать.
+    # Свободное пространство на один груз, где можем его двигать.
     free_L_for_one_cargo = free_L // len(body.cargo)
 
     # Груз не влазит: error!
     if free_L < 0:
         return {'error': 'error'}
 
+    # Сумма всех грузов - в т.
+    weightSum = sum(map(lambda x: x.weight, body.cargo))
+
     # Поиск оптимального расположения всех грузов на платформе.
     best_score = float('inf')
     best_cargo = None
     for _ in range(10):
-        model = Optimize(body.cargo, step=1, border_epsilon_step=1, count_early_stop=10)
+        model = Optimize(
+            body.cargo, body.floor_length, weightSum, free_L_for_one_cargo,
+            step=1, border_epsilon_step=1, count_early_stop=10
+        )
         if abs(model.score) < abs(best_score):
             best_score = model.score
             best_cargo = model.best_cargo
@@ -26,9 +42,6 @@ async def calculate_centers_of_mass(body: CalculateRequest) -> dict:
     body.cargo = best_cargo
 
     # Пункт 1.
-    # Сумма всех грузов - в т.
-    weightSum = sum(map(lambda x: x.weight, body.cargo))
-
     # Продольное смещение грузов в вагоне - в мм.
     longitudinal_displacement_in_car = 0.5 * body.floor_length - \
         (sum(map(lambda x: x.weight * x.center_gravity, body.cargo)) / weightSum)
@@ -61,6 +74,15 @@ async def calculate_centers_of_mass(body: CalculateRequest) -> dict:
         'longitudinal_displacement_in_car': longitudinal_displacement_in_car,
         'longitudinal_displacement_with_car': longitudinal_displacement_with_car,
         'general_height_center_gravity': general_height_center_gravity,
+        'cargo': [
+            {
+                'length': item.length,
+                'width': item.width,
+                'height': item.height,
+                'quantity': item.quantity,
+                'weight': item.weight,
+                'delta': item.delta
+            }
+            for item in body.cargo
+        ]
     }
-
-

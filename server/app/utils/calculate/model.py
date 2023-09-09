@@ -10,7 +10,13 @@ class Optimize:
     def __init__(self, cargo: list[CargoItem], floor_length: int,
                  weightSum: float, free_L_for_one_cargo: int,
                  step=1, border_epsilon_step=1, count_early_stop=10):
-        """ step - шаг влево/вправо для оптимизации delta. """
+        """ step - шаг влево/вправо для delta.
+        floor_length - длина пола.
+        weightSum - общая сумма груза.
+        free_L_for_one_cargo - свободное пространство на один груз, где можем его двигать.
+        step - точность и скорость оптимизации (чем ниже, тем точнее, но немного медленнее).
+        border_epsilon_step - случайное макс. добавление к step.
+        count_early_stop - ранняя остановка, если оптимизация не улучшается. """
 
         self.best_cargo = None
         self.score = float('inf')
@@ -27,7 +33,8 @@ class Optimize:
         self._optimize(cargo)
 
     def _init_delta(self, cargo: list[CargoItem], start_idx=0):
-        """ Инициализация значений delta. Внутри создаёт новый cargo. """
+        """ Инициализация значений delta. Внутри создаёт новый cargo.
+        Функция инициализирует расположение грузов для дальнейшей оптимизации. """
 
         copy_cargo = [copy.deepcopy(item) for item in cargo]
 
@@ -71,7 +78,9 @@ class Optimize:
         return False
 
     def _optimize(self, cargo: list[CargoItem]) -> None:
-        """ Процесс оптимизации delta. """
+        """ Процесс оптимизации продольного смещения.
+        Изменяется координата центра тяжести вагона относительно торцевого борта,
+        чтобы продольное смещение стремилось к нулю. """
 
         # Меняю очерёдность расположение каждого груза.
         for i in range(0, len(cargo)):
@@ -125,25 +134,3 @@ class Optimize:
 
                 # После каждой эпохи увеличиваю.
                 counter += 1
-            # print(self.score)        
-
-
-if __name__ == '__main__':
-
-    # Исходные данные:
-    floor_length = 13400 # Длина пола
-
-    cargo = [
-        CargoItem(length=1080, width=1580, height=390, quantity=1, weight=395 / 1000, delta=None),
-        CargoItem(length=3650, width=3320, height=1500, quantity=1, weight=6670 / 1000, delta=None),  
-        CargoItem(length=4100, width=1720, height=1150, quantity=1, weight=1865 / 1000, delta=None),
-        CargoItem(length=3870, width=2890, height=1020, quantity=1, weight=4085 / 1000, delta=None),
-    ]
-    weightSum = sum(map(lambda x: x['weight'], cargo))
-
-    free_L = floor_length - sum([item['length'] for item in cargo])
-    free_L_for_one_cargo = free_L // len(cargo)
-
-    tmp = Optimize(cargo, floor_length, weightSum, free_L_for_one_cargo)
-    print(tmp.score)
-    print(tmp.best_cargo)
