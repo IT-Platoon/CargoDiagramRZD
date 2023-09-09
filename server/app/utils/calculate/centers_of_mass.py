@@ -1,16 +1,29 @@
 from app.schemas import CalculateRequest
+from model import Optimize
 
 
 async def calculate_centers_of_mass(body: CalculateRequest) -> dict:
     
+    # Свободное место на платформе, если расположить все грузы.
+    free_L = body.floor_length - sum([item.length for item in body.cargo])
+    # Даём пустое пространство на один груз, где можем его двигать.
+    free_L_for_one_cargo = free_L // len(body.cargo)
 
-    for index, item in enumerate(body.cargo):
-        if index:
-            prev = body.cargo[index - 1]
-            item.center_gravity = (item.length + prev.length) / 2 \
-                + prev.center_gravity + item.coordinate_center_gravity_load_relative_end_board
-        else:
-            item.center_gravity = item.length / 2 + item.coordinate_center_gravity_load_relative_end_board
+    # Груз не влазит: error!
+    if free_L < 0:
+        return {'error': 'error'}
+
+    # Поиск оптимального расположения всех грузов на платформе.
+    best_score = float('inf')
+    best_cargo = None
+    for _ in range(10):
+        model = Optimize(body.cargo, step=1, border_epsilon_step=1, count_early_stop=10)
+        if abs(model.score) < abs(best_score):
+            best_score = model.score
+            best_cargo = model.best_cargo
+
+    # Оптимальное расположение груза.
+    body.cargo = best_cargo
 
     # Пункт 1.
     # Сумма всех грузов - в т.
