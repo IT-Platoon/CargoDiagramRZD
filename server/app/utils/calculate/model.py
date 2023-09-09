@@ -85,7 +85,6 @@ class Optimize:
 
         # Меняю очерёдность расположение каждого груза.
         for i in range(0, len(cargo)):
-            print(f'Началась оптимизация, где первый груз с индексом {i}')
             copy_cargo = self._init_delta(cargo, i)
 
             # Эпохи:
