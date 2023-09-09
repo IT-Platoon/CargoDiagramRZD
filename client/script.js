@@ -32,11 +32,11 @@ calcButton.addEventListener('click', async () => {
   const heightCenterGravityFromLevelRailHeadsTitle = document.getElementById('height-center-gravity-from-level-rail-heads');
   const platformBase = document.getElementById('platform-base');
 
-  const floorLengthValue = floorLength?.value !== undefined ? Number(floorLength?.value) : 0
-  const tareWeightValue = tareWeight?.value !== undefined ? Number(tareWeight?.value) : 0
-  const floorHeightFromLevelRailHeadsTitleValue = floorHeightFromLevelRailHeadsTitle?.value !== undefined ? Number(floorHeightFromLevelRailHeadsTitle?.value) : 0
-  const heightCenterGravityFromLevelRailHeadsTitleValue = heightCenterGravityFromLevelRailHeadsTitle?.value !== undefined ? Number(heightCenterGravityFromLevelRailHeadsTitle?.value) : 0
-  const platformBaseValue = platformBase?.value !== undefined ? Number(platformBase?.value) : 0
+  const floorLengthValue = Number(floorLength?.value) > 0 ? Number(floorLength?.value) : 0
+  const tareWeightValue = Number(tareWeight?.value) > 0 ? Number(tareWeight?.value) : 0
+  const floorHeightFromLevelRailHeadsTitleValue = Number(floorHeightFromLevelRailHeadsTitle?.value) > 0 ? Number(floorHeightFromLevelRailHeadsTitle?.value) : 0
+  const heightCenterGravityFromLevelRailHeadsTitleValue = Number(heightCenterGravityFromLevelRailHeadsTitle?.value) > 0 ? Number(heightCenterGravityFromLevelRailHeadsTitle?.value) : 0
+  const platformBaseValue = Number(platformBase?.value) > 0 ? Number(platformBase?.value) : 0
 
   let values = (
     floorLengthValue &&
@@ -45,8 +45,8 @@ calcButton.addEventListener('click', async () => {
     heightCenterGravityFromLevelRailHeadsTitleValue &&
     platformBaseValue
   )
-
-  if(values && cargoArray) {
+  
+  if(values && cargoArray.length) {
     const request = {
       floor_length: floorLengthValue,
       tare_weight: tareWeightValue,
@@ -81,11 +81,11 @@ cargoAdd.addEventListener('click', async () => {
   const cargoWeight = document.getElementById('cargo-weight');
   const cargoQuantity = document.getElementById('cargo-quantity');
 
-  const cargoLengthValue = cargoLength?.value !== undefined ? Number(cargoLength?.value) : 0
-  const cargoWidthValue = cargoWidth?.value !== undefined ? Number(cargoWidth?.value) : 0
-  const cargoHeightValue = cargoHeight?.value !== undefined ? Number(cargoHeight?.value) : 0
-  const cargoWeightValue = cargoWeight?.value !== undefined ? Number(cargoWeight?.value) : 0
-  const cargoQuantityValue = cargoQuantity?.value !== undefined ? Number(cargoQuantity?.value) : 0
+  const cargoLengthValue = Number(cargoLength?.value) > 0 ? Number(cargoLength?.value) : 0
+  const cargoWidthValue = Number(cargoWidth?.value) > 0 ? Number(cargoWidth?.value) : 0
+  const cargoHeightValue = Number(cargoHeight?.value) > 0 ? Number(cargoHeight?.value) : 0
+  const cargoWeightValue = Number(cargoWeight?.value) > 0 ? Number(cargoWeight?.value) : 0
+  const cargoQuantityValue = Number(cargoQuantity?.value) > 0 ? Number(cargoQuantity?.value) : 0
 
   let values = (
     cargoLengthValue &&
@@ -105,7 +105,7 @@ cargoAdd.addEventListener('click', async () => {
     }
     cargoArray.push(obj)
     const item = document.createElement("li")
-    const info = `Длина ${obj.length} мм; Ширина ${obj.width} мм; Высота ${obj.height} мм; Вес одного ${obj.weight} кг; Количество ${obj.quantity} шт;`
+    const info = `Длина ${obj.length} мм; Ширина ${obj.width} мм; Высота ${obj.height} мм; Вес одного ${obj.weight} т; Количество ${obj.quantity} шт;`
     item.appendChild(document.createTextNode(info))
     cargoList.appendChild(item)
 
