@@ -8,6 +8,11 @@ CargoDiagramRZD
 
 ### Запуск
 
+1. Генерация переменных окружения:
+```commandline
+make env
+```
+
 1. Запуск приложения:
 ```commandline
 make docker-run
