@@ -13,7 +13,7 @@ let resultController;
 
 async function sendRequest(body) {
   const response = await fetch(
-    '/api/v1/calculate',
+    'http://localhost/api/v1/calculate',
     {
       method: 'POST',
       body: JSON.stringify(body),
@@ -69,7 +69,13 @@ calcButton.addEventListener('click', async () => {
       return;
     }
 
-    console.log(result)
+    document.getElementById('report').href =
+        'data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,'
+        + result.report;
+    getDrawing();
+
+    document.getElementById('report-section').classList.remove('hidden');
+    document.getElementById('drawing').classList.remove('hidden');
   }
 });
 

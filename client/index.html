@@ -6,6 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="style.css"/>
         <title>РЖД Грузы</title>
+        <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+        <script src="drawing.js" defer></script>
         <script src="script.js" defer></script>
     </head>
     <body>
@@ -81,7 +83,7 @@
                     </span>
                     <input
                         id="cargo-length"
-                        value="0"
+                        value="1000"
                         min="1"
                         type="number"
                     />
@@ -93,7 +95,7 @@
                     </span>
                     <input
                         id="cargo-width"
-                        value="0"
+                        value="1000"
                         min="1"
                         type="number"
                     />
@@ -105,7 +107,7 @@
                     </span>
                     <input
                         id="cargo-height"
-                        value="0"
+                        value="1000"
                         min="1"
                         type="number"
                     />
@@ -117,7 +119,7 @@
                     </span>
                     <input
                         id="cargo-weight"
-                        value="0"
+                        value="1000"
                         min="0"
                         type="number"
                     />
@@ -129,7 +131,7 @@
                     </span>
                     <input
                         id="cargo-quantity"
-                        value="0"
+                        value="1"
                         min="1"
                         type="number"
                     />
@@ -149,5 +151,15 @@
                 В вашем браузере отключён javascript. Сайт не будет работать корректно!
             </noscript>
         </main>
+
+        <section id="report-section" class="hidden">
+            <a download="Пояснительная записка.docx" id="report">
+                Скачать пояснительную записку
+            </a>
+        </section>
+
+        <section id="drawing" class="hidden">
+        </section>
+
     </body>
 </html>
