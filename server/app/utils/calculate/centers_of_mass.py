@@ -1,5 +1,5 @@
 from app.schemas import CalculateRequest
-from model import Optimize
+from .model import Optimize
 
 
 async def calculate_centers_of_mass(body: CalculateRequest) -> dict:
@@ -16,8 +16,9 @@ async def calculate_centers_of_mass(body: CalculateRequest) -> dict:
     # Поиск оптимального расположения всех грузов на платформе.
     best_score = float('inf')
     best_cargo = None
+    weightSum = sum(map(lambda x: x.weight, body.cargo))
     for _ in range(10):
-        model = Optimize(body.cargo, step=1, border_epsilon_step=1, count_early_stop=10)
+        model = Optimize(body.cargo, body.floor_length, weightSum, free_L_for_one_cargo, step=1, border_epsilon_step=1, count_early_stop=10)
         if abs(model.score) < abs(best_score):
             best_score = model.score
             best_cargo = model.best_cargo
@@ -31,11 +32,11 @@ async def calculate_centers_of_mass(body: CalculateRequest) -> dict:
 
     # Продольное смещение грузов в вагоне - в мм.
     longitudinal_displacement_in_car = 0.5 * body.floor_length - \
-        (sum(map(lambda x: x.weight * x.center_gravity, body.cargo)) / weightSum)
+        (sum(map(lambda x: x.weight * x.delta, body.cargo)) / weightSum)
 
     # Продольное смещение грузов с вагоном - в мм.
     longitudinal_displacement_with_car = 0.5 * body.floor_length - \
-        (sum(map(lambda x: x.weight * x.center_gravity, body.cargo)) \
+        (sum(map(lambda x: x.weight * x.delta, body.cargo)) \
         + body.tare_weight * body.floor_length / 2) / (weightSum + body.tare_weight)
 
     # Пункт 2.
@@ -62,5 +63,3 @@ async def calculate_centers_of_mass(body: CalculateRequest) -> dict:
         'longitudinal_displacement_with_car': longitudinal_displacement_with_car,
         'general_height_center_gravity': general_height_center_gravity,
     }
-
-

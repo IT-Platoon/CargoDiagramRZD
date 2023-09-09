@@ -9,7 +9,7 @@ class CargoItem(BaseModel):
     height: int
     quantity: int
     weight: int
-    delta: int
+    delta: Optional[int]
 
 
 class CalculateRequest(BaseModel):
