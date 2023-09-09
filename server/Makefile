@@ -41,16 +41,7 @@ format:  ##@Code Reformat code with isort and black
 	poetry run python3 -m black $(CODE)
 
 run:  ##@Application Run application server
-	make migrate head && uvicorn $(APPLICATION_NAME).__main__:app --host ${APP_HOST} --port ${APP_PORT} --reload
-
-migrate:  ##@Database Do all migrations in database
-	cd $(APPLICATION_NAME)/db && alembic upgrade $(args)
-
-test:  ##@Testing Test application with pytest in docker
-	$(TEST)
-
-test-cov:  ##@Testing Test application with pytest and create coverage report
-	$(TEST) --cov=$(APPLICATION_NAME) --cov-report html
+	uvicorn $(APPLICATION_NAME).__main__:app --host ${APP_HOST} --port ${APP_PORT} --reload
 
 %::
 	echo $(MESSAGE)

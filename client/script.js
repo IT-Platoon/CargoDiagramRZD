@@ -1,0 +1,117 @@
+"use strict";
+
+const calcButton = document.getElementById('calc-button');
+const cargoAdd = document.getElementById('cargo-add');
+
+let cargoArray = []
+const cargoList = document.getElementById('cargo-list');
+
+const resultWrapper = document.getElementById('result');
+const resultList = document.getElementById('result-list');
+
+let resultController;
+
+async function sendRequest(body) {
+  const response = await fetch(
+    '/api/v1/calculate',
+    {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.json();
+}
+
+calcButton.addEventListener('click', async () => {
+  const floorLength = document.getElementById('floor-length');
+  const tareWeight = document.getElementById('tare-weight');
+  const floorHeightFromLevelRailHeadsTitle = document.getElementById('floor-height-from-level-rail-heads');
+  const heightCenterGravityFromLevelRailHeadsTitle = document.getElementById('height-center-gravity-from-level-rail-heads');
+  const platformBase = document.getElementById('platform-base');
+
+  const floorLengthValue = floorLength?.value !== undefined ? Number(floorLength?.value) : 0
+  const tareWeightValue = tareWeight?.value !== undefined ? Number(tareWeight?.value) : 0
+  const floorHeightFromLevelRailHeadsTitleValue = floorHeightFromLevelRailHeadsTitle?.value !== undefined ? Number(floorHeightFromLevelRailHeadsTitle?.value) : 0
+  const heightCenterGravityFromLevelRailHeadsTitleValue = heightCenterGravityFromLevelRailHeadsTitle?.value !== undefined ? Number(heightCenterGravityFromLevelRailHeadsTitle?.value) : 0
+  const platformBaseValue = platformBase?.value !== undefined ? Number(platformBase?.value) : 0
+
+  let values = (
+    floorLengthValue &&
+    tareWeightValue &&
+    floorHeightFromLevelRailHeadsTitleValue &&
+    heightCenterGravityFromLevelRailHeadsTitleValue &&
+    platformBaseValue
+  )
+
+  if(values && cargoArray) {
+    const request = {
+      floor_length: floorLengthValue,
+      tare_weight: tareWeightValue,
+      floor_height_from_level_rail_heads: floorHeightFromLevelRailHeadsTitleValue,
+      height_center_gravity_from_level_rail_heads: heightCenterGravityFromLevelRailHeadsTitleValue,
+      platform_base: platformBaseValue,
+      cargo: cargoArray,
+    }
+
+    resultList.innerHTML = '';
+
+    let result;
+    try {
+      result = await sendRequest(request);
+    } catch (e) {
+      console.error(e);
+    }
+
+    if (result?.result == undefined) {
+      return;
+    }
+
+    console.log(result)
+  }
+});
+
+cargoAdd.addEventListener('click', async () => {
+  const cargoLength = document.getElementById('cargo-length');
+  const cargoWidth = document.getElementById('cargo-width');
+  const cargoHeight = document.getElementById('cargo-height');
+  const cargoWeight = document.getElementById('cargo-weight');
+  const cargoQuantity = document.getElementById('cargo-quantity');
+
+  const cargoLengthValue = cargoLength?.value !== undefined ? Number(cargoLength?.value) : 0
+  const cargoWidthValue = cargoWidth?.value !== undefined ? Number(cargoWidth?.value) : 0
+  const cargoHeightValue = cargoHeight?.value !== undefined ? Number(cargoHeight?.value) : 0
+  const cargoWeightValue = cargoWeight?.value !== undefined ? Number(cargoWeight?.value) : 0
+  const cargoQuantityValue = cargoQuantity?.value !== undefined ? Number(cargoQuantity?.value) : 0
+
+  let values = (
+    cargoLengthValue &&
+    cargoWidthValue &&
+    cargoHeightValue &&
+    cargoWeightValue &&
+    cargoQuantityValue
+  )
+
+  if (values) {
+    const obj = {
+      length: cargoLengthValue,
+      width: cargoWidthValue,
+      height: cargoHeightValue,
+      weight: cargoWeightValue,
+      quantity: cargoQuantityValue,
+    }
+    cargoArray.push(obj)
+    const item = document.createElement("li")
+    const info = `Длина ${obj.length}; Ширина ${obj.width}; Высота ${obj.height}; Вес одного ${obj.weight}; Количество ${obj.quantity};`
+    item.appendChild(document.createTextNode(info))
+    cargoList.appendChild(item)
+
+    cargoLength.value = 0
+    cargoWidth.value = 0
+    cargoHeight.value = 0
+    cargoWeight.value = 0
+    cargoQuantity.value = 0
+  }
+});

@@ -69,12 +69,6 @@ docker-down-prod:  ##@Application Stop application in docker in production
 docker-downv-prod:  ##@Application Stop application in docker and remove volumes in production
 	docker-compose -f docker-compose.prod.yml down -v --remove-orphans
 
-revision:  ##@Database Create new revision file automatically with prefix (ex. 2023_01_01_14cs34f_message.py)
-	docker-compose -f docker-compose.yml run server bash -c 'cd $(APPLICATION_NAME)/db && alembic revision --autogenerate'
-
-open-db:  ##@Database Open database inside docker-image
-	docker exec -it postgres psql -d $(POSTGRES_DB) -U $(POSTGRES_USER) -p $(POSTGRES_PORT)
-
 open-server:  ##@Application Open container inside docker-image
 	docker-compose -f docker-compose.yml run server bash
 
@@ -86,12 +80,6 @@ docker-cleanv:  ##@Application Remove all docker objects with volumes
 
 docker-stop:  ##@Application Stop all docker containers
 	@docker container rm -f $$(docker ps -aq) || true
-
-test:  ##@Testing Test application with pytest
-	docker-compose -f docker-compose.yml run server bash -c 'make test'
-
-test-cov:  ##@Testing Test application with pytest and create coverage report
-	docker-compose -f docker-compose.yml run server bash -c 'make test-cov'
 
 %::
 	echo $(MESSAGE)

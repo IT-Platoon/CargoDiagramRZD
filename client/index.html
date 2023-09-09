@@ -1,1 +1,153 @@
-Hello, World!
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+        <title>CargoDiagramRZD</title>
+        <script src="script.js" defer></script>
+    </head>
+    <body>
+        <main class="main">
+            <h1 class="title">CargoDiagramRZD</h1>
+
+            <div class="cargo-info">
+                <label class="floor-length-label">
+                    <span class="floor-length-title">
+                        Длина пола:
+                    </span>
+                    <input
+                        id="floor-length"
+                        value="13400"
+                        min="1"
+                        type="number"
+                    />
+                </label>
+
+                <label class="tare-weight-label">
+                    <span class="tare-weight-title">
+                        Масса тары:
+                    </span>
+                    <input
+                        id="tare-weight"
+                        value="21"
+                        min="1"
+                        type="number"
+                    />
+                </label>
+
+                <label class="floor-height-from-level-rail-heads-label">
+                    <span class="floor-height-from-level-rail-heads-title">
+                        Высота пола от УГР:
+                    </span>
+                    <input
+                        id="floor-height-from-level-rail-heads"
+                        value="1310"
+                        min="1"
+                        type="number"
+                    />
+                </label>
+
+                <label class="height-center-gravity-from-level-rail-heads-label">
+                    <span class="height-center-gravity-from-level-rail-heads-title">
+                        Высота центра тяжести от УГР:
+                    </span>
+                    <input
+                        id="height-center-gravity-from-level-rail-heads"
+                        value="800"
+                        min="1"
+                        type="number"
+                    />
+                </label>
+
+                <label class="platform-base-label">
+                    <span class="platform-base-title">
+                        База платформы:
+                    </span>
+                    <input
+                        id="platform-base"
+                        value="9720"
+                        min="1"
+                        type="number"
+                    />
+                </label>
+            </div>
+
+            <div class="cargo-info">
+                <label class="cargo-length-label">
+                    <span class="cargo-length-title">
+                        Длина груза:
+                    </span>
+                    <input
+                        id="cargo-length"
+                        value="0"
+                        min="1"
+                        type="number"
+                    />
+                </label>
+                
+                <label class="cargo-width-label">
+                    <span class="cargo-width-title">
+                        Ширина груза:
+                    </span>
+                    <input
+                        id="cargo-width"
+                        value="0"
+                        min="1"
+                        type="number"
+                    />
+                </label>
+
+                <label class="cargo-height-label">
+                    <span class="cargo-height-title">
+                        Высота груза:
+                    </span>
+                    <input
+                        id="cargo-height"
+                        value="0"
+                        min="1"
+                        type="number"
+                    />
+                </label>
+
+                <label class="cargo-weight-label">
+                    <span class="cargo-weight-title">
+                        Вес груза:
+                    </span>
+                    <input
+                        id="cargo-weight"
+                        value="0"
+                        min="0"
+                        type="number"
+                    />
+                </label>
+
+                <label class="cargo-quantity-label">
+                    <span class="cargo-quantity-title">
+                        Количество груза:
+                    </span>
+                    <input
+                        id="cargo-quantity"
+                        value="0"
+                        min="1"
+                        type="number"
+                    />
+                </label>
+
+                <ul id="cargo-list"></ul>
+            </div>
+            <button id="cargo-add">Добавить груз</button>
+
+            <button id="calc-button">Посчитать</button>
+
+            <div id="result" class="hidden">
+                <h2 class="result-title">Результат</h2>
+                <ul id="result-list"></ul>
+            </div>
+            <noscript>
+                В вашем браузере отключён javascript. Сайт не будет работать корректно!
+            </noscript>
+        </main>
+    </body>
+</html>
