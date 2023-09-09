@@ -23,4 +23,6 @@ async def run_calculate(
 ):
     result = await calculate_centers_of_mass(body)
     report = await get_report(result)
+    print(result)
+    print(report)
     return CalculateResponse(result=result, report=report).dict()
