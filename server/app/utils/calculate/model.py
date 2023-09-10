@@ -166,13 +166,13 @@ class Optimize:
                         top_step_cargo[k].delta_width -= self._step
 
                         # Проверки на то, чтобы груз не выходил на пределы платформы по бокам.
-                        if bottom_step_cargo[k].delta_width >= 0:
+                        if bottom_step_cargo[k].delta_width >= 0 and bottom_step_cargo[k].delta_width + bottom_step_cargo[k].width < self._floor_width:
                             # проверка
                             if self._check_best_cargo(bottom_step_cargo, False):
                                 copy_cargo = self.best_cargo
                                 flag_work_epoch = True
  
-                        if top_step_cargo[k].delta_width + top_step_cargo[k].width < self._floor_width:
+                        if top_step_cargo[k].delta_width >= 0 and top_step_cargo[k].delta_width + top_step_cargo[k].width < self._floor_width:
                             # проверка
                             if self._check_best_cargo(top_step_cargo, False):
                                 copy_cargo = self.best_cargo
