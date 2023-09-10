@@ -110,18 +110,14 @@ async def calculate_centers_of_mass(body: CalculateRequest) -> dict:
         friction_force_longitudinal_direction.append(item.friction_force_longitudinal_direction)
 
     return {
-        'longitudinal_displacement_in_car': longitudinal_displacement_in_car,  # В мм
-        'longitudinal_displacement_with_car': longitudinal_displacement_with_car,  # В мм
-        'lateral_displacement_in_car': lateral_displacement_in_car,  # в мм
-        'lateral_displacement_with_car': lateral_displacement_with_car,  # в мм
-        'height_center_gravity_in_car': height_center_gravity_in_car,  # в мм
-        'general_height_center_gravity': general_height_center_gravity,  # В мм
-        'windward_surface': windward_surface,  # в м2
-        'specific_length_inertial_force_per_ton_cargo_weight': specific_length_inertial_force_per_ton_cargo_weight,  # в тс/с
-        'longitudinal_inertial_force': longitudinal_inertial_force,  # в тс
-        'wind_load': wind_load,  # в тс
-        'friction_force_longitudinal_direction': friction_force_longitudinal_direction,  # в тс
-
+        'longitudinal_displacement_in_car': round(longitudinal_displacement_in_car, 3),  # В мм
+        'longitudinal_displacement_with_car': round(longitudinal_displacement_with_car, 3),  # В мм
+        'lateral_displacement_in_car': round(lateral_displacement_in_car, 3),  # в мм
+        'lateral_displacement_with_car': round(lateral_displacement_with_car, 3),  # в мм
+        'height_center_gravity_in_car': round(height_center_gravity_in_car, 3),  # в мм
+        'general_height_center_gravity': round(general_height_center_gravity, 3),  # В мм
+        'windward_surface': round(windward_surface, 3),  # в м2
+        'specific_length_inertial_force_per_ton_cargo_weight': round(specific_length_inertial_force_per_ton_cargo_weight, 3),  # в тс/с
         'cargo': [
             {
                 'length': item.length,    # В мм
@@ -130,7 +126,10 @@ async def calculate_centers_of_mass(body: CalculateRequest) -> dict:
                 'quantity': item.quantity,    # В шт
                 'weight': item.weight,    # В т
                 'delta_length': item.delta_length,  # В мм
-                'delta_width': item.delta_width  # В мм
+                'delta_width': item.delta_width,  # В мм
+                'wind_load': round(item.wind_load, 3),  # В тс
+                'longitudinal_inertial_force': round(item.longitudinal_inertial_force, 3),  # В тс
+                'friction_force_longitudinal_direction': round(item.friction_force_longitudinal_direction, 3),  # В тс
             }
             for item in body.cargo
         ]

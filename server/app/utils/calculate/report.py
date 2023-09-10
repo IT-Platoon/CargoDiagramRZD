@@ -18,11 +18,15 @@ async def create_document(
     doc.add_paragraph(f"Общая высота ЦТ: H(цт) = {result['general_height_center_gravity']} мм")
     doc.add_paragraph(f"Расчет наветренной поверхности: S(bok) = {result['windward_surface']} м2")
     doc.add_paragraph(f"Удельная продольная инерционная сила на одну тонну веса груза: а(пр) = {result['specific_length_inertial_force_per_ton_cargo_weight']} тс/с")
-    for i in range(len(result['longitudinal_inertial_force'])):
-        doc.add_heading(f'Груз {i+1}', 3)
-        doc.add_paragraph(f"Продольная инерционная сила: F(пр) = {result['longitudinal_inertial_force'][i]} тс", style='List Bullet 2')
-        doc.add_paragraph(f"Ветровая нагрузка: W(е) = {result['wind_load'][i]} тс", style='List Bullet 2')
-        doc.add_paragraph(f"Сила трения в продольном направлении: F(пр тр) = {result['friction_force_longitudinal_direction'][i]} тс", style='List Bullet 2')
+    for index, cargo in enumerate(result['cargo'], start=1):
+        doc.add_heading(f'Груз {index}', 3)
+        doc.add_paragraph(f"Длина {cargo['length']}", style='List Bullet 2')
+        doc.add_paragraph(f"Ширина {cargo['width']}", style='List Bullet 2')
+        doc.add_paragraph(f"Высота {cargo['height']}", style='List Bullet 2')
+        doc.add_paragraph(f"Масса {cargo['weight']}", style='List Bullet 2')
+        doc.add_paragraph(f"Продольная инерционная сила: F(пр) = {cargo['longitudinal_inertial_force']} тс", style='List Bullet 2')
+        doc.add_paragraph(f"Ветровая нагрузка: W(е) = {cargo['wind_load']} тс", style='List Bullet 2')
+        doc.add_paragraph(f"Сила трения в продольном направлении: F(пр тр) = {cargo['friction_force_longitudinal_direction']} тс", style='List Bullet 2')
     doc.save(docxfile.name)
 
 
