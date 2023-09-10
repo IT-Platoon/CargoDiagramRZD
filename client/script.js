@@ -60,6 +60,8 @@ calcButton.addEventListener('click', async () => {
       cargo: cargoArray,
     }
 
+    console.log(request)
+
     resultList.innerHTML = '';
 
     let result;
