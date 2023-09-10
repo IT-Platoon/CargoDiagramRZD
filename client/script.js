@@ -8,7 +8,7 @@ const cargoList = document.getElementById('cargo-list');
 
 async function sendRequest(body) {
   const response = await fetch(
-    'http://localhost/api/v1/calculate',
+    '/api/v1/calculate',
     {
       method: 'POST',
       body: JSON.stringify(body),
@@ -85,17 +85,6 @@ calcButton.addEventListener('click', async () => {
     );
 
     console.log(result)
-    floorLength.value = 13400
-    floorWidth.value = 2870
-    tareWeight.value = 21
-    floorHeightFromLevelRailHeadsTitle.value = 1310
-    heightCenterGravityFromLevelRailHeadsTitle.value = 800
-    platformBase.value = 9720
-    cargoArray = []
-    while (cargoList.firstChild) {
-      cargoList.removeChild(cargoList.firstChild);
-    }
-
   }
 });
 

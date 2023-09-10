@@ -160,10 +160,10 @@ class Optimize:
                     for k in range(len(copy_cargo)):
     
                         bottom_step_cargo = [copy.deepcopy(item) for item in copy_cargo]
-                        bottom_step_cargo[k].delta_width -= self._step
+                        bottom_step_cargo[k].delta_width += self._step
 
                         top_step_cargo = [copy.deepcopy(item) for item in copy_cargo]
-                        top_step_cargo[k].delta_width += self._step
+                        top_step_cargo[k].delta_width -= self._step
 
                         # Проверки на то, чтобы груз не выходил на пределы платформы по бокам.
                         if bottom_step_cargo[k].delta_width >= 0:
