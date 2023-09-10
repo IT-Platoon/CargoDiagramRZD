@@ -126,6 +126,8 @@ input::placeholder {
   border-radius: 1rem;
   padding: 10px 20px;
   color: var(--contrast-light);
+  text-transform: uppercase;
+  font-size: 20px;
 }
 
 #calc-button:hover, #cargo-add:hover {
