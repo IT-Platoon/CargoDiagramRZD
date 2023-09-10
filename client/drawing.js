@@ -11,6 +11,8 @@ function getDrawing(
         longitudinal_displacement_in_car,
         longitudinal_displacement_with_car,
         general_height_center_gravity,
+        lateral_displacement_in_car,
+        lateral_displacement_with_car,
     } = result;
 
     const width = 800;
@@ -69,6 +71,42 @@ function getDrawing(
         .attr("cy", height - heightCenterGravityFromLevelRailHeadsTitleValue * unit)
         .attr('r', 5);
 
+
+    for (item of cargo) {
+        svg.append("rect") // грузы
+            .attr("stroke", "blue")
+            .attr("fill", "none")
+            .attr("stroke-width", "2")
+            .attr('x', (item.delta_length - item.length/2)*unit)
+            .attr('y', height - (floorHeightFromLevelRailHeadsTitleValue + 50 + item.height) * unit)
+            .attr('width', item.length*unit)
+            .attr('height', item.height*unit);
+
+        svg.append("circle") // центры тяжести грузов
+            .attr("fill", "orange")
+            .attr("cx", item.delta_length*unit)
+            .attr("cy", height - (floorHeightFromLevelRailHeadsTitleValue + 50 + item.height / 2) * unit)
+            .attr("r", 3);
+
+        svg.append("text") // длина
+            .attr("color", "gray")
+            .attr("text-anchor", "middle")
+            .attr("dy", '-0.2em')
+            .attr("x", item.delta_length*unit)
+            .attr("y", height - (floorHeightFromLevelRailHeadsTitleValue + 50 + item.height) * unit)
+            .text(item.length);
+
+        svg.append("text") // высота
+            .attr("color", "gray")
+            .attr("alignment-baseline", "middle")
+            .attr("text-anchor", "middle")
+            .attr("writing-mode", "tb")
+            .attr("dx", '0.4em')
+            .attr("x", (item.delta_length - item.length/2)*unit)
+            .attr("y", height - (floorHeightFromLevelRailHeadsTitleValue + 50 + item.height / 2) * unit)
+            .text(item.height);
+    }
+
     svg.append("circle") // центр тяжести груза
         .attr("fill", "red")
         .attr("cx", (floorLengthValue / 2 - longitudinal_displacement_in_car) * unit)
@@ -80,41 +118,6 @@ function getDrawing(
         .attr("cy", height - general_height_center_gravity * unit)
         .attr('r', 5);
 
-
-    for (item of cargo) {
-        svg.append("rect") // грузы
-            .attr("stroke", "blue")
-            .attr("fill", "none")
-            .attr("stroke-width", "2")
-            .attr('x', (item.delta - item.length/2)*unit)
-            .attr('y', height - (floorHeightFromLevelRailHeadsTitleValue + 50 + item.height) * unit)
-            .attr('width', item.length*unit)
-            .attr('height', item.height*unit);
-
-        svg.append("circle") // центры тяжести грузов
-            .attr("fill", "orange")
-            .attr("cx", item.delta*unit)
-            .attr("cy", height - (floorHeightFromLevelRailHeadsTitleValue + 50 + item.height / 2) * unit)
-            .attr("r", 3);
-
-        svg.append("text") // длина
-            .attr("color", "gray")
-            .attr("text-anchor", "middle")
-            .attr("dy", '-0.2em')
-            .attr("x", item.delta*unit)
-            .attr("y", height - (floorHeightFromLevelRailHeadsTitleValue + 50 + item.height) * unit)
-            .text(item.length);
-
-        svg.append("text") // высота
-            .attr("color", "gray")
-            .attr("alignment-baseline", "middle")
-            .attr("text-anchor", "middle")
-            .attr("writing-mode", "tb")
-            .attr("dx", '0.4em')
-            .attr("x", (item.delta - item.length/2)*unit)
-            .attr("y", height - (floorHeightFromLevelRailHeadsTitleValue + 50 + item.height / 2) * unit)
-            .text(item.height);
-    }
 
 
     const svg2 = svgWrapper.append("svg")
@@ -139,40 +142,29 @@ function getDrawing(
         .attr("cy", height2 / 2)
         .attr('r', 5);
 
-    svg2.append("circle") // центр тяжести груза
-        .attr("fill", "red")
-        .attr("cx", width / 2 - longitudinal_displacement_in_car * unit)
-        .attr("cy", height2 / 2)
-        .attr('r', 5);
-    svg2.append("circle") // центр тяжести груза с вагоном
-        .attr("fill", "red")
-        .attr("cx", width / 2 - longitudinal_displacement_with_car * unit)
-        .attr("cy", height2 / 2)
-        .attr('r', 5);
-
 
     for (item of cargo) {
         svg2.append("rect") // грузы
             .attr("stroke", "blue")
             .attr("fill", "none")
             .attr("stroke-width", "2")
-            .attr('x', (item.delta - item.length/2)*unit)
-            .attr('y', (height2 - item.width*unit) / 2)
+            .attr('x', (item.delta_length - item.length/2)*unit)
+            .attr('y', height2/2 - platformWidthValue*unit/2 + item.delta_width*unit - item.width*unit/2)
             .attr('width', item.length*unit)
             .attr('height', item.width*unit);
 
         svg2.append("circle") // центры тяжести грузов
             .attr("fill", "orange")
-            .attr("cx", item.delta*unit)
-            .attr("cy", height2 / 2)
+            .attr("cx", item.delta_length*unit)
+            .attr("cy", (height2 - platformWidthValue*unit) / 2 + item.delta_width*unit)
             .attr("r", 3);
 
         svg2.append("text") // длина
             .attr("color", "gray")
             .attr("text-anchor", "middle")
             .attr("dy", '-0.2em')
-            .attr("x", item.delta*unit)
-            .attr("y", (height2 - item.width*unit) / 2)
+            .attr("x", item.delta_length*unit)
+            .attr("y", height2/2 - platformWidthValue*unit/2 + item.delta_width*unit - item.width*unit/2)
             .text(item.length);
 
         svg2.append("text") // ширина
@@ -181,10 +173,22 @@ function getDrawing(
             .attr("text-anchor", "middle")
             .attr("writing-mode", "tb")
             .attr("dx", '0.4em')
-            .attr("x", (item.delta - item.length/2)*unit)
-            .attr("y", height2 / 2)
+            .attr("x", (item.delta_length - item.length/2)*unit)
+            .attr("y", (height2 - platformWidthValue*unit) / 2 + item.delta_width*unit)
             .text(item.width);
     }
+
+    svg2.append("circle") // центр тяжести груза
+        .attr("fill", "red")
+        .attr("cx", width / 2 - longitudinal_displacement_in_car * unit)
+        .attr("cy", height2 / 2 - lateral_displacement_in_car * unit)
+        .attr('r', 5);
+    svg2.append("circle") // центр тяжести груза с вагоном
+        .attr("fill", "red")
+        .attr("cx", width / 2 - longitudinal_displacement_with_car * unit)
+        .attr("cy", height2 / 2 - lateral_displacement_with_car * unit)
+        .attr('r', 5);
+
 
     const svg3 = svgWrapper.append("svg")
         .attr("width", height2 + 20)
@@ -224,31 +228,34 @@ function getDrawing(
             .attr("fill", "none")
             .attr("stroke-width", "1")
             .attr("stroke-dasharray", "8")
-            .attr('x', (height2 - item.width*unit) / 2)
+            .attr('x', height2/2 - platformWidthValue*unit/2 + item.delta_width*unit - item.width*unit/2)
             .attr('y', height - (floorHeightFromLevelRailHeadsTitleValue + item.height + 50)*unit)
             .attr('width', item.width*unit)
             .attr('height', item.height*unit);
+
+        svg3.append("circle") // центры тяжести грузов
+            .attr("fill", "orange")
+            .attr('cx', height2/2 - platformWidthValue*unit/2 + item.delta_width*unit)
+            .attr('cy', height - (floorHeightFromLevelRailHeadsTitleValue + item.height/2 + 50)*unit)
+            .attr("r", 3);
     }
 
-    svg3.append("text") // ширина
-        .attr("color", "gray")
-        .attr("text-anchor", "middle")
-        .attr("font-weight", "bold")
-        .attr("dy", '-0.2em')
-        .attr("x", height2/2)
-        .attr("y", height - (floorHeightFromLevelRailHeadsTitleValue + maxHeight + 50)*unit)
-        .text(maxWidth);
+    svg3.append("circle") // центр тяжести платформы
+        .attr("fill", "orange")
+        .attr("cx", height2/2)
+        .attr("cy", height - heightCenterGravityFromLevelRailHeadsTitleValue * unit)
+        .attr('r', 5);
 
-    svg3.append("text") // высота
-        .attr("color", "gray")
-        .attr("alignment-baseline", "middle")
-        .attr("text-anchor", "middle")
-        .attr("writing-mode", "tb")
-        .attr("font-weight", "bold")
-        .attr("dx", '-0.8em')
-        .attr("x", (height2 - maxWidth*unit)/2)
-        .attr("y", height/2)
-        .text(maxHeight);
+    svg3.append("circle") // центр тяжести груза
+        .attr("fill", "red")
+        .attr("cx", height2/2 - lateral_displacement_in_car * unit)
+        .attr("cy", height - general_height_center_gravity * unit)
+        .attr('r', 5);
+    svg3.append("circle") //  центр тяжести груза с вагоном
+        .attr("fill", "red")
+        .attr("cx", height2/2 - lateral_displacement_with_car * unit)
+        .attr("cy", height - general_height_center_gravity * unit)
+        .attr('r', 5);
 
 
     const {outerHTML} = svgWrapper.node()

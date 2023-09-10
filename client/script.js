@@ -80,16 +80,6 @@ calcButton.addEventListener('click', async () => {
         result.result,
     );
 
-    const {
-      general_height_center_gravity,
-      longitudinal_displacement_in_car,
-      longitudinal_displacement_with_car,
-    } = result.result;
-
-    document.querySelector('.hgc').innerHTML = general_height_center_gravity;
-    document.querySelector('.gc').innerHTML = longitudinal_displacement_in_car;
-    document.querySelector('.gcp').innerHTML = longitudinal_displacement_with_car;
-
     document.querySelectorAll('.hidden').forEach(el =>
         el.classList.remove('hidden')
     );
