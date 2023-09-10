@@ -66,10 +66,10 @@ function getDrawing(
         ]);
 
     svg.append("circle") // центр тяжести платформы
-        .attr("fill", "orange")
+        .attr("fill", "yellow")
         .attr("cx", floorLengthValue / 2 * unit)
         .attr("cy", height - heightCenterGravityFromLevelRailHeadsTitleValue * unit)
-        .attr('r', 5);
+        .attr('r', 3);
 
 
     for (item of cargo) {
@@ -108,7 +108,7 @@ function getDrawing(
     }
 
     svg.append("circle") // центр тяжести груза
-        .attr("fill", "red")
+        .attr("fill", "pink")
         .attr("cx", (floorLengthValue / 2 - longitudinal_displacement_in_car) * unit)
         .attr("cy", height - general_height_center_gravity * unit)
         .attr('r', 5);
@@ -137,10 +137,10 @@ function getDrawing(
         .attr('height', platformWidthValue*unit);
 
     svg2.append("circle") // центр тяжести платформы
-        .attr("fill", "orange")
+        .attr("fill", "yellow")
         .attr("cx", width / 2)
         .attr("cy", height2 / 2)
-        .attr('r', 5);
+        .attr('r', 3);
 
 
     for (item of cargo) {
@@ -179,7 +179,7 @@ function getDrawing(
     }
 
     svg2.append("circle") // центр тяжести груза
-        .attr("fill", "red")
+        .attr("fill", "pink")
         .attr("cx", width / 2 - longitudinal_displacement_in_car * unit)
         .attr("cy", height2 / 2 - lateral_displacement_in_car * unit)
         .attr('r', 5);
@@ -241,21 +241,72 @@ function getDrawing(
     }
 
     svg3.append("circle") // центр тяжести платформы
-        .attr("fill", "orange")
+        .attr("fill", "yellow")
         .attr("cx", height2/2)
         .attr("cy", height - heightCenterGravityFromLevelRailHeadsTitleValue * unit)
-        .attr('r', 5);
+        .attr('r', 3);
 
     svg3.append("circle") // центр тяжести груза
-        .attr("fill", "red")
+        .attr("fill", "pink")
         .attr("cx", height2/2 - lateral_displacement_in_car * unit)
         .attr("cy", height - general_height_center_gravity * unit)
         .attr('r', 5);
-    svg3.append("circle") //  центр тяжести груза с вагоном
+    svg3.append("circle") // центр тяжести груза с вагоном
         .attr("fill", "red")
         .attr("cx", height2/2 - lateral_displacement_with_car * unit)
         .attr("cy", height - general_height_center_gravity * unit)
         .attr('r', 5);
+
+
+    const svgLegend = svgWrapper.append("svg")
+        .attr("width", 350)
+        .attr("height", height + 20)
+        .attr("x", Math.max(width, height2) - 350)
+        .attr("y", height2 + height + 40);
+
+    svgLegend.append("circle")
+        .attr('fill', 'orange')
+        .attr("cx",10)
+        .attr("cy",10)
+        .attr("r", 4);
+    svgLegend.append("text")
+        .attr("x", 40)
+        .attr("y", 10)
+        .attr("alignment-baseline","middle")
+        .text("Центр тяжести груза");
+
+    svgLegend.append("circle")
+        .attr('fill', 'yellow')
+        .attr("cx",10)
+        .attr("cy",50)
+        .attr("r", 4);
+    svgLegend.append("text")
+        .attr("x", 40)
+        .attr("y", 50)
+        .attr("alignment-baseline","middle")
+        .text("Центр тяжести платформы");
+
+    svgLegend.append("circle")
+        .attr('fill', 'pink')
+        .attr("cx",10)
+        .attr("cy",90)
+        .attr("r", 4);
+    svgLegend.append("text")
+        .attr("x", 40)
+        .attr("y", 90)
+        .attr("alignment-baseline","middle")
+        .text("Общий центр тяжести грузов");
+
+    svgLegend.append("circle")
+        .attr('fill', 'red')
+        .attr("cx",10)
+        .attr("cy",130)
+        .attr("r", 4);
+    svgLegend.append("text")
+        .attr("x", 40)
+        .attr("y", 130)
+        .attr("alignment-baseline","middle")
+        .text("Общий центр тяжести грузов с вагоном");
 
 
     const {outerHTML} = svgWrapper.node()

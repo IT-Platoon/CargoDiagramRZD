@@ -8,7 +8,7 @@ const cargoList = document.getElementById('cargo-list');
 
 async function sendRequest(body) {
   const response = await fetch(
-    '/api/v1/calculate',
+    'http://localhost/api/v1/calculate',
     {
       method: 'POST',
       body: JSON.stringify(body),
