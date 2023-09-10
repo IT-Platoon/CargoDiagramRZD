@@ -9,6 +9,7 @@ async def create_document(
     docxfile: tempfile.NamedTemporaryFile,
 ) -> None:
     doc = Document()
+    doc.add_heading('Расчетно-пояснительная записка')
     doc.add_paragraph(f"Продольное смещение грузов в вагоне: l(c) = {result['longitudinal_displacement_in_car']} мм")
     doc.add_paragraph(f"Продольное смещение грузов с вагоном: l(c) = {result['longitudinal_displacement_with_car']} мм")
     doc.add_paragraph(f"Поперечное смещение в вагоне: b = {result['lateral_displacement_in_car']} мм")
