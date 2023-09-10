@@ -11,6 +11,9 @@ class CargoItem(BaseModel):
     weight: float
     delta_length: Optional[float]
     delta_width: Optional[float]
+    wind_load: Optional[list[float]]
+    longitudinal_inertial_force: Optional[list[float]]
+    friction_force_longitudinal_direction: Optional[list[float]]
 
 
 class CalculateRequest(BaseModel):

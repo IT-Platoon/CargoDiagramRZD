@@ -92,14 +92,22 @@ async def calculate_centers_of_mass(body: CalculateRequest) -> dict:
     specific_length_inertial_force_per_ton_cargo_weight = slif[mounting_type]['a22'] - \
         (weightSum * (slif[mounting_type]['a22'] - slif[mounting_type]['a94'])) / 72
 
-    # Продольная инерционная сила в тс
-    longitudinal_inertial_force = [specific_length_inertial_force_per_ton_cargo_weight * item.weight for item in body.cargo]
+    longitudinal_inertial_force = []
+    wind_load = []
+    friction_force_longitudinal_direction = []
+    for item in body.cargo:
 
-    # Ветровая нагрузка в тс
-    wind_load = [50 * item.length / 1000 * item.height / 1000 * 0.001 for item in body.cargo]
+        # Продольная инерционная сила в тс
+        item.longitudinal_inertial_force = specific_length_inertial_force_per_ton_cargo_weight * item.weight 
+        longitudinal_inertial_force.append(item.longitudinal_inertial_force)
 
-    # Сила трения в продольном направлении в тс
-    friction_force_longitudinal_direction = [mu * item.weight for item in body.cargo]
+        # Ветровая нагрузка в тс
+        item.wind_load = 50 * item.length / 1000 * item.height / 1000 * 0.001
+        wind_load.append(item.wind_load)
+
+        # Сила трения в продольном направлении в тс
+        item.friction_force_longitudinal_direction = mu * item.weight
+        friction_force_longitudinal_direction.append(item.friction_force_longitudinal_direction)
 
     return {
         'longitudinal_displacement_in_car': longitudinal_displacement_in_car,  # В мм

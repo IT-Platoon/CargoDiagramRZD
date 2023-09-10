@@ -17,9 +17,11 @@ async def create_document(
     doc.add_paragraph(f"Общая высота ЦТ: H(цт) = {result['general_height_center_gravity']} мм")
     doc.add_paragraph(f"Расчет наветренной поверхности: S(bok) = {result['windward_surface']} м2")
     doc.add_paragraph(f"Удельная продольная инерционная сила на одну тонну веса груза: а(пр) = {result['specific_length_inertial_force_per_ton_cargo_weight']} тс/с")
-    doc.add_paragraph(f"Продольная инерционная сила: F(пр) = {result['longitudinal_inertial_force']} тс")
-    doc.add_paragraph(f"Ветровая нагрузка: W(е) = {result['wind_load']} тс")
-    doc.add_paragraph(f"Сила трения в продольном направлении: F(пр тр) = {result['friction_force_longitudinal_direction']} тс")
+    for i in range(len(result['longitudinal_inertial_force'])):
+        doc.add_heading(f'Груз {i+1}', 3)
+        doc.add_paragraph(f"Продольная инерционная сила: F(пр) = {result['longitudinal_inertial_force'][i]} тс", style='List Bullet 2')
+        doc.add_paragraph(f"Ветровая нагрузка: W(е) = {result['wind_load'][i]} тс", style='List Bullet 2')
+        doc.add_paragraph(f"Сила трения в продольном направлении: F(пр тр) = {result['friction_force_longitudinal_direction'][i]} тс", style='List Bullet 2')
     doc.save(docxfile.name)
 
 

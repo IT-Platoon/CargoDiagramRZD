@@ -84,6 +84,9 @@ calcButton.addEventListener('click', async () => {
     heightCenterGravityFromLevelRailHeadsTitle.value = 800
     platformBase.value = 9720
     cargoArray = []
+    while (cargoList.firstChild) {
+      cargoList.removeChild(cargoList.firstChild);
+    }
   }
 });
 
