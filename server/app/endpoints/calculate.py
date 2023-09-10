@@ -21,6 +21,7 @@ async def run_calculate(
     _: Request,
     body: Annotated[CalculateRequest, Body(...)]
 ):
+    
     result = await calculate_centers_of_mass(body)
     if "error" in result:
         return CalculateResponse(result=result).dict()

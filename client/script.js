@@ -22,21 +22,22 @@ async function sendRequest(body) {
 
 calcButton.addEventListener('click', async () => {
   const floorLength = document.getElementById('floor-length');
+  const floorWidth = document.getElementById('floor-width');
   const tareWeight = document.getElementById('tare-weight');
   const floorHeightFromLevelRailHeadsTitle = document.getElementById('floor-height-from-level-rail-heads');
   const heightCenterGravityFromLevelRailHeadsTitle = document.getElementById('height-center-gravity-from-level-rail-heads');
   const platformBase = document.getElementById('platform-base');
-  const platformWidth = document.getElementById('platform-width');
 
   const floorLengthValue = Number(floorLength?.value) > 0 ? Number(floorLength?.value) : 0;
   const tareWeightValue = Number(tareWeight?.value) > 0 ? Number(tareWeight?.value) : 0;
   const floorHeightFromLevelRailHeadsTitleValue = Number(floorHeightFromLevelRailHeadsTitle?.value) > 0 ? Number(floorHeightFromLevelRailHeadsTitle?.value) : 0;
   const heightCenterGravityFromLevelRailHeadsTitleValue = Number(heightCenterGravityFromLevelRailHeadsTitle?.value) > 0 ? Number(heightCenterGravityFromLevelRailHeadsTitle?.value) : 0;
   const platformBaseValue = Number(platformBase?.value) > 0 ? Number(platformBase?.value) : 0;
-  const platformWidthValue = Number(platformWidth?.value) > 0 ? Number(platformWidth?.value) : 0;
+  const floorWidthValue = Number(floorWidth?.value) > 0 ? Number(floorWidth?.value) : 0;
 
   let values = (
     floorLengthValue &&
+    floorWidthValue &&
     tareWeightValue &&
     floorHeightFromLevelRailHeadsTitleValue &&
     heightCenterGravityFromLevelRailHeadsTitleValue &&
@@ -46,6 +47,7 @@ calcButton.addEventListener('click', async () => {
   if(values && cargoArray.length) {
     const request = {
       floor_length: floorLengthValue,
+      floor_width: floorWidthValue,
       tare_weight: tareWeightValue,
       floor_height_from_level_rail_heads: floorHeightFromLevelRailHeadsTitleValue,
       height_center_gravity_from_level_rail_heads: heightCenterGravityFromLevelRailHeadsTitleValue,
@@ -74,7 +76,7 @@ calcButton.addEventListener('click', async () => {
         floorHeightFromLevelRailHeadsTitleValue,
         heightCenterGravityFromLevelRailHeadsTitleValue,
         platformBaseValue,
-        platformWidthValue,
+        floorWidthValue,
         result.result,
     );
 
@@ -91,6 +93,19 @@ calcButton.addEventListener('click', async () => {
     document.querySelectorAll('.hidden').forEach(el =>
         el.classList.remove('hidden')
     );
+
+    console.log(result)
+    floorLength.value = 13400
+    floorWidth.value = 2870
+    tareWeight.value = 21
+    floorHeightFromLevelRailHeadsTitle.value = 1310
+    heightCenterGravityFromLevelRailHeadsTitle.value = 800
+    platformBase.value = 9720
+    cargoArray = []
+    while (cargoList.firstChild) {
+      cargoList.removeChild(cargoList.firstChild);
+    }
+
   }
 });
 

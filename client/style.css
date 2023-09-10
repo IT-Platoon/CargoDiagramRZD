@@ -68,6 +68,7 @@ main, section {
   border: 1px solid var(--contrast-light);
   box-shadow: 0 0 1rem var(--contrast-light);
   display: flex;
+  max-width: 100vw;
 }
 
 #report-section {

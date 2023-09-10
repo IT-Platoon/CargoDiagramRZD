@@ -9,11 +9,16 @@ class CargoItem(BaseModel):
     height: float
     quantity: int
     weight: float
-    delta: Optional[float]
+    delta_length: Optional[float]
+    delta_width: Optional[float]
+    wind_load: Optional[list[float]]
+    longitudinal_inertial_force: Optional[list[float]]
+    friction_force_longitudinal_direction: Optional[list[float]]
 
 
 class CalculateRequest(BaseModel):
     floor_length: float = Field(default=13400)
+    floor_width: float = Field(default=2870)
     tare_weight: float = Field(default=21)
     floor_height_from_level_rail_heads: float = Field(default=1310)
     height_center_gravity_from_level_rail_heads: float = Field(default=800)
