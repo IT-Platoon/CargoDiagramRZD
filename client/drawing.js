@@ -1,22 +1,24 @@
-function getDrawing() {
-    const L = 13400;
-    const W = 2870;
-    const wugr = 1310;
-    const vct = 800;
-    const dp = 9720;
-    const cargo = [
-        {'length': 1080, 'width': 1580, 'height': 390, 'weight': 395 / 1000},
-        {'length': 3650, 'width': 3320, 'height': 1500, 'weight': 6670 / 1000},
-        {'length': 4100, 'width': 1720, 'height': 1150, 'weight': 1865 / 1000},
-        {'length': 3870, 'width': 2890, 'height': 1020, 'weight': 4085 / 1000},
-    ];
+function getDrawing(
+    floorLengthValue,
+    floorHeightFromLevelRailHeadsTitleValue,
+    heightCenterGravityFromLevelRailHeadsTitleValue,
+    platformBaseValue,
+    platformWidthValue,
+    result,
+) {
+    const {
+        cargo,
+        longitudinal_displacement_in_car,
+        longitudinal_displacement_with_car,
+        general_height_center_gravity,
+    } = result;
 
     const width = 800;
-    const unit = width / L;
+    const unit = width / floorLengthValue;
     const maxHeight = Math.max(...cargo.map(v => v.height));
-    const height = (wugr + maxHeight) * unit * 1.5;
+    const height = (floorHeightFromLevelRailHeadsTitleValue + maxHeight) * unit * 1.5;
     const maxWidth = Math.max(...cargo.map(v => v.width));
-    const height2 = Math.max(W, maxWidth) * unit * 1.5;
+    const height2 = Math.max(platformWidthValue, maxWidth) * unit * 1.5;
 
     const svgWrapper = d3.create("svg")
         .attr("width", Math.max(width, height2) + 20)
@@ -31,16 +33,8 @@ function getDrawing() {
         .attr("x", 10)
         .attr("y", 0);
 
-    svg.append("circle") // центр тяжести платформы
-        .style("stroke", "orange")
-        .style("fill", "orange")
-        .style("stroke-width", "2")
-        .attr("cx", L / 2 * unit)
-        .attr("cy", height - vct * unit)
-        .attr('r', 5);
-
-    const wheelMargin = unit * (L - dp) / 2;
-    const radius = (vct / 2 - 50) * unit;
+    const wheelMargin = unit * (floorLengthValue - platformBaseValue) / 2;
+    const radius = (heightCenterGravityFromLevelRailHeadsTitleValue / 2 - 50) * unit;
 
     [
         wheelMargin + radius * 1.5,
@@ -62,45 +56,53 @@ function getDrawing() {
         .attr("fill", "none")
         .attr("stroke-width", "2")
         .attr("points", [
-            0, height - wugr*unit,
+            0, height - floorHeightFromLevelRailHeadsTitleValue*unit,
             0, height - radius * 2,
-            unit*L, height - radius * 2,
-            unit*L, height - wugr*unit,
-            0, height - wugr*unit,
+            unit*floorLengthValue, height - radius * 2,
+            unit*floorLengthValue, height - floorHeightFromLevelRailHeadsTitleValue*unit,
+            0, height - floorHeightFromLevelRailHeadsTitleValue*unit,
         ]);
-
 
     svg.append("circle") // центр тяжести платформы
         .attr("fill", "orange")
-        .attr("cx", L / 2 * unit)
-        .attr("cy", height - vct * unit)
+        .attr("cx", floorLengthValue / 2 * unit)
+        .attr("cy", height - heightCenterGravityFromLevelRailHeadsTitleValue * unit)
         .attr('r', 5);
 
-    const delta = 50;
+    svg.append("circle") // центр тяжести груза
+        .attr("fill", "red")
+        .attr("cx", (floorLengthValue / 2 - longitudinal_displacement_in_car) * unit)
+        .attr("cy", height - general_height_center_gravity * unit)
+        .attr('r', 5);
+    svg.append("circle") //  центр тяжести груза с вагоном
+        .attr("fill", "red")
+        .attr("cx", (floorLengthValue / 2 - longitudinal_displacement_with_car) * unit)
+        .attr("cy", height - general_height_center_gravity * unit)
+        .attr('r', 5);
 
-    let fromStart = 150*unit
+
     for (item of cargo) {
         svg.append("rect") // грузы
             .attr("stroke", "blue")
             .attr("fill", "none")
             .attr("stroke-width", "2")
-            .attr('x', fromStart + delta*unit)
-            .attr('y', height - (wugr + 50 + item.height) * unit)
+            .attr('x', (item.delta - item.length/2)*unit)
+            .attr('y', height - (floorHeightFromLevelRailHeadsTitleValue + 50 + item.height) * unit)
             .attr('width', item.length*unit)
             .attr('height', item.height*unit);
 
         svg.append("circle") // центры тяжести грузов
             .attr("fill", "orange")
-            .attr("cx", fromStart + (delta + item.length/2)*unit)
-            .attr("cy", height - (wugr + 50 + item.height / 2) * unit)
+            .attr("cx", item.delta*unit)
+            .attr("cy", height - (floorHeightFromLevelRailHeadsTitleValue + 50 + item.height / 2) * unit)
             .attr("r", 3);
 
         svg.append("text") // длина
             .attr("color", "gray")
             .attr("text-anchor", "middle")
             .attr("dy", '-0.2em')
-            .attr("x", fromStart + (delta + item.length/2)*unit)
-            .attr("y", height - (wugr + 50 + item.height) * unit)
+            .attr("x", item.delta*unit)
+            .attr("y", height - (floorHeightFromLevelRailHeadsTitleValue + 50 + item.height) * unit)
             .text(item.length);
 
         svg.append("text") // высота
@@ -108,19 +110,12 @@ function getDrawing() {
             .attr("alignment-baseline", "middle")
             .attr("text-anchor", "middle")
             .attr("writing-mode", "tb")
-            .attr("dx", '0.6em')
-            .attr("x", fromStart)
-            .attr("y", height - (wugr + 50 + item.height / 2) * unit)
+            .attr("dx", '0.4em')
+            .attr("x", (item.delta - item.length/2)*unit)
+            .attr("y", height - (floorHeightFromLevelRailHeadsTitleValue + 50 + item.height / 2) * unit)
             .text(item.height);
-
-        fromStart += (item.length + delta) * unit;
     }
 
-    svg.append("circle") // общий центр тяжести
-        .attr("fill", "red")
-        .attr("cx", L / 2 * unit)
-        .attr("cy", height - wugr * 1.5 * unit)
-        .attr('r', 5);
 
     const svg2 = svgWrapper.append("svg")
         .attr("width", width + 20)
@@ -134,9 +129,9 @@ function getDrawing() {
         .attr("fill", "none")
         .attr("stroke-width", "2")
         .attr('x', 0)
-        .attr('y', (height2 - W*unit) * 0.5)
-        .attr('width', L*unit)
-        .attr('height', W*unit);
+        .attr('y', (height2 - platformWidthValue*unit) * 0.5)
+        .attr('width', floorLengthValue*unit)
+        .attr('height', platformWidthValue*unit);
 
     svg2.append("circle") // центр тяжести платформы
         .attr("fill", "orange")
@@ -144,21 +139,31 @@ function getDrawing() {
         .attr("cy", height2 / 2)
         .attr('r', 5);
 
+    svg2.append("circle") // центр тяжести груза
+        .attr("fill", "red")
+        .attr("cx", width / 2 - longitudinal_displacement_in_car * unit)
+        .attr("cy", height2 / 2)
+        .attr('r', 5);
+    svg2.append("circle") // центр тяжести груза с вагоном
+        .attr("fill", "red")
+        .attr("cx", width / 2 - longitudinal_displacement_with_car * unit)
+        .attr("cy", height2 / 2)
+        .attr('r', 5);
 
-    fromStart = 150*unit;
+
     for (item of cargo) {
         svg2.append("rect") // грузы
             .attr("stroke", "blue")
             .attr("fill", "none")
             .attr("stroke-width", "2")
-            .attr('x', fromStart + delta*unit)
+            .attr('x', (item.delta - item.length/2)*unit)
             .attr('y', (height2 - item.width*unit) / 2)
             .attr('width', item.length*unit)
             .attr('height', item.width*unit);
 
         svg2.append("circle") // центры тяжести грузов
             .attr("fill", "orange")
-            .attr("cx", fromStart + (delta + item.length/2)*unit)
+            .attr("cx", item.delta*unit)
             .attr("cy", height2 / 2)
             .attr("r", 3);
 
@@ -166,7 +171,7 @@ function getDrawing() {
             .attr("color", "gray")
             .attr("text-anchor", "middle")
             .attr("dy", '-0.2em')
-            .attr("x", fromStart + (delta + item.length/2)*unit)
+            .attr("x", item.delta*unit)
             .attr("y", (height2 - item.width*unit) / 2)
             .text(item.length);
 
@@ -175,19 +180,11 @@ function getDrawing() {
             .attr("alignment-baseline", "middle")
             .attr("text-anchor", "middle")
             .attr("writing-mode", "tb")
-            .attr("dx", '0.6em')
-            .attr("x", fromStart)
+            .attr("dx", '0.4em')
+            .attr("x", (item.delta - item.length/2)*unit)
             .attr("y", height2 / 2)
             .text(item.width);
-
-        fromStart += (item.length + delta) * unit;
     }
-
-    svg2.append("circle") // общий центр тяжести
-        .attr("fill", "red")
-        .attr("cx", L / 2 * unit)
-        .attr("cy", height2 / 2)
-        .attr('r', 5);
 
     const svg3 = svgWrapper.append("svg")
         .attr("width", height2 + 20)
@@ -200,11 +197,11 @@ function getDrawing() {
         .attr("fill", "none")
         .attr("stroke-width", "2")
         .attr("points", [
-            (height2 - W*unit) / 2, height - wugr*unit,
-            (height2 - W*unit) / 2, height - radius * 2,
-            (height2 + W*unit) / 2, height - radius * 2,
-            (height2 + W*unit) / 2, height - wugr*unit,
-            (height2 - W*unit) / 2, height - wugr*unit,
+            (height2 - platformWidthValue*unit) / 2, height - floorHeightFromLevelRailHeadsTitleValue*unit,
+            (height2 - platformWidthValue*unit) / 2, height - radius * 2,
+            (height2 + platformWidthValue*unit) / 2, height - radius * 2,
+            (height2 + platformWidthValue*unit) / 2, height - floorHeightFromLevelRailHeadsTitleValue*unit,
+            (height2 - platformWidthValue*unit) / 2, height - floorHeightFromLevelRailHeadsTitleValue*unit,
         ]);
 
     [
@@ -228,7 +225,7 @@ function getDrawing() {
             .attr("stroke-width", "1")
             .attr("stroke-dasharray", "8")
             .attr('x', (height2 - item.width*unit) / 2)
-            .attr('y', height - (wugr + item.height + 50)*unit)
+            .attr('y', height - (floorHeightFromLevelRailHeadsTitleValue + item.height + 50)*unit)
             .attr('width', item.width*unit)
             .attr('height', item.height*unit);
     }
@@ -239,7 +236,7 @@ function getDrawing() {
         .attr("font-weight", "bold")
         .attr("dy", '-0.2em')
         .attr("x", height2/2)
-        .attr("y", height - (wugr + maxHeight + 50)*unit)
+        .attr("y", height - (floorHeightFromLevelRailHeadsTitleValue + maxHeight + 50)*unit)
         .text(maxWidth);
 
     svg3.append("text") // высота
@@ -254,14 +251,10 @@ function getDrawing() {
         .text(maxHeight);
 
 
-    drawing.append(svgWrapper.node());
-
-// const svgBlob = new Blob(
-//     [svgWrapper.node().outerHTML],
-//     {type: "image/svg+xml;charset=utf-8"}
-// );
-// const svgUrl = URL.createObjectURL(svgBlob);
-// const downloadLink = document.getElementById("link");
-// downloadLink.href = svgUrl;
-// downloadLink.download = 'Схема';
+    const {outerHTML} = svgWrapper.node()
+    drawing.innerHTML = outerHTML;
+    drawing.href = URL.createObjectURL(new Blob(
+        [outerHTML],
+        {type: "image/svg+xml;charset=utf-8"}
+    ));
 }

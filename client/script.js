@@ -6,11 +6,6 @@ const cargoAdd = document.getElementById('cargo-add');
 let cargoArray = []
 const cargoList = document.getElementById('cargo-list');
 
-const resultWrapper = document.getElementById('result');
-const resultList = document.getElementById('result-list');
-
-let resultController;
-
 async function sendRequest(body) {
   const response = await fetch(
     'http://localhost/api/v1/calculate',
@@ -31,12 +26,14 @@ calcButton.addEventListener('click', async () => {
   const floorHeightFromLevelRailHeadsTitle = document.getElementById('floor-height-from-level-rail-heads');
   const heightCenterGravityFromLevelRailHeadsTitle = document.getElementById('height-center-gravity-from-level-rail-heads');
   const platformBase = document.getElementById('platform-base');
+  const platformWidth = document.getElementById('platform-width');
 
-  const floorLengthValue = Number(floorLength?.value) > 0 ? Number(floorLength?.value) : 0
-  const tareWeightValue = Number(tareWeight?.value) > 0 ? Number(tareWeight?.value) : 0
-  const floorHeightFromLevelRailHeadsTitleValue = Number(floorHeightFromLevelRailHeadsTitle?.value) > 0 ? Number(floorHeightFromLevelRailHeadsTitle?.value) : 0
-  const heightCenterGravityFromLevelRailHeadsTitleValue = Number(heightCenterGravityFromLevelRailHeadsTitle?.value) > 0 ? Number(heightCenterGravityFromLevelRailHeadsTitle?.value) : 0
-  const platformBaseValue = Number(platformBase?.value) > 0 ? Number(platformBase?.value) : 0
+  const floorLengthValue = Number(floorLength?.value) > 0 ? Number(floorLength?.value) : 0;
+  const tareWeightValue = Number(tareWeight?.value) > 0 ? Number(tareWeight?.value) : 0;
+  const floorHeightFromLevelRailHeadsTitleValue = Number(floorHeightFromLevelRailHeadsTitle?.value) > 0 ? Number(floorHeightFromLevelRailHeadsTitle?.value) : 0;
+  const heightCenterGravityFromLevelRailHeadsTitleValue = Number(heightCenterGravityFromLevelRailHeadsTitle?.value) > 0 ? Number(heightCenterGravityFromLevelRailHeadsTitle?.value) : 0;
+  const platformBaseValue = Number(platformBase?.value) > 0 ? Number(platformBase?.value) : 0;
+  const platformWidthValue = Number(platformWidth?.value) > 0 ? Number(platformWidth?.value) : 0;
 
   let values = (
     floorLengthValue &&
@@ -56,8 +53,6 @@ calcButton.addEventListener('click', async () => {
       cargo: cargoArray,
     }
 
-    resultList.innerHTML = '';
-
     let result;
     try {
       result = await sendRequest(request);
@@ -73,10 +68,29 @@ calcButton.addEventListener('click', async () => {
     document.getElementById('report').href =
         'data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,'
         + result.report;
-    getDrawing();
 
-    document.getElementById('report-section').classList.remove('hidden');
-    document.getElementById('drawing').classList.remove('hidden');
+    getDrawing(
+        floorLengthValue,
+        floorHeightFromLevelRailHeadsTitleValue,
+        heightCenterGravityFromLevelRailHeadsTitleValue,
+        platformBaseValue,
+        platformWidthValue,
+        result.result,
+    );
+
+    const {
+      general_height_center_gravity,
+      longitudinal_displacement_in_car,
+      longitudinal_displacement_with_car,
+    } = result.result;
+
+    document.querySelector('.hgc').innerHTML = general_height_center_gravity;
+    document.querySelector('.gc').innerHTML = longitudinal_displacement_in_car;
+    document.querySelector('.gcp').innerHTML = longitudinal_displacement_with_car;
+
+    document.querySelectorAll('.hidden').forEach(el =>
+        el.classList.remove('hidden')
+    );
   }
 });
 

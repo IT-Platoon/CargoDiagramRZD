@@ -62,9 +62,23 @@ main, section {
   padding: 1rem;
 }
 
+#drawing {
+  border-radius: 2rem;
+  overflow: hidden;
+  border: 1px solid var(--contrast-light);
+  box-shadow: 0 0 1rem var(--contrast-light);
+  display: flex;
+}
+
 #report-section {
   justify-content: center;
   align-items: center;
+}
+
+#report {
+  text-decoration: none;
+  font-size: 2rem;
+  color: var(--contrast-light);
 }
 
 .title {
@@ -158,7 +172,7 @@ input::placeholder {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 .cargo-info {
