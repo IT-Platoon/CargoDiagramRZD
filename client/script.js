@@ -75,6 +75,13 @@ calcButton.addEventListener('click', async () => {
     }
 
     console.log(result)
+    floorLength.value = 13400
+    floorWidth.value = 2870
+    tareWeight.value = 21
+    floorHeightFromLevelRailHeadsTitle.value = 1310
+    heightCenterGravityFromLevelRailHeadsTitle.value = 800
+    platformBase.value = 9720
+    cargoArray = []
   }
 });
 
