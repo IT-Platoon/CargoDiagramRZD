@@ -8,7 +8,7 @@ const cargoList = document.getElementById('cargo-list');
 
 async function sendRequest(body) {
   const response = await fetch(
-    '/api/v1/calculate',
+    'http://localhost/api/v1/calculate',
     {
       method: 'POST',
       body: JSON.stringify(body),
@@ -138,6 +138,6 @@ cargoAdd.addEventListener('click', async () => {
     cargoWidth.value = 1000
     cargoHeight.value = 1000
     cargoWeight.value = 1
-    cargoQuantity.value = 0
+    cargoQuantity.value = 1
   }
 });

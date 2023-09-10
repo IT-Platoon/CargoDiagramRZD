@@ -45,7 +45,7 @@ body {
   border-radius: 0.5rem;
 }
 
-main, section {
+main {
   background: linear-gradient(315deg, var(--background), var(--foreground));
   border: 1px solid var(--contrast-light);
   box-shadow: 0 0 1rem var(--contrast-light);
@@ -60,6 +60,25 @@ main, section {
   min-height: 200px;
   border-radius: 2rem;
   padding: 1rem;
+}
+
+section {
+  background: linear-gradient(315deg, var(--background), var(--foreground));
+  border: 1px solid var(--contrast-light);
+  box-shadow: 0 0 1rem var(--contrast-light);
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  cursor: pointer;
+  box-sizing: border-box;
+  min-width: min(99vw, 300px);
+  max-width: 800px;
+  min-height: 100px;
+  padding: 1rem;
+  border-radius: 1rem;
+  text-transform: uppercase;
 }
 
 #drawing {
@@ -190,8 +209,4 @@ input::placeholder {
   align-items: center;
   text-align: left;
   margin-bottom: 10px;
-}
-
-.logo {
-
 }
