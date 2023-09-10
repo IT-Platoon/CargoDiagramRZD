@@ -8,11 +8,13 @@ class CargoItem(BaseModel):
     quantity: int
     weight: int
 
-    delta: int
+    delta_length: int
+    delta_width: int
 
 
 class CalculateRequest(BaseModel):
     floor_length: int
+    floor_width: int
     tare_weight: int
     floor_height_from_level_rail_heads: int
     height_center_gravity_from_level_rail_heads: int
