@@ -12,6 +12,10 @@ async def create_document(
     doc.add_paragraph(f"Продольное смещение грузов в вагоне: l(c) = {result['longitudinal_displacement_in_car']} мм")
     doc.add_paragraph(f"Продольное смещение грузов с вагоном: l(c) = {result['longitudinal_displacement_with_car']} мм")
     doc.add_paragraph(f"Общая высота ЦТ: H(цт) = {result['general_height_center_gravity']} мм")
+    doc.add_paragraph(f"Удельная продольная инерционная сила на одну тонну веса груза: а(пр) = {1} тс/с")
+    doc.add_paragraph(f"Продольная инерционная сила: F(пр) = {2} тс")
+    doc.add_paragraph(f"Ветровая нагрузка: W(е) = {3} тс")
+    doc.add_paragraph(f"Сила трения в продольном направлении: F(пр тр) = {4} тс")
     doc.save(docxfile.name)
 
 

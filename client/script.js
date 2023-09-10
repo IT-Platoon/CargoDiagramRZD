@@ -27,12 +27,14 @@ async function sendRequest(body) {
 
 calcButton.addEventListener('click', async () => {
   const floorLength = document.getElementById('floor-length');
+  const floorWidth = document.getElementById('floor-width');
   const tareWeight = document.getElementById('tare-weight');
   const floorHeightFromLevelRailHeadsTitle = document.getElementById('floor-height-from-level-rail-heads');
   const heightCenterGravityFromLevelRailHeadsTitle = document.getElementById('height-center-gravity-from-level-rail-heads');
   const platformBase = document.getElementById('platform-base');
 
   const floorLengthValue = Number(floorLength?.value) > 0 ? Number(floorLength?.value) : 0
+  const floorWidthValue = Number(floorWidth?.value) > 0 ? Number(floorWidth?.value) : 0
   const tareWeightValue = Number(tareWeight?.value) > 0 ? Number(tareWeight?.value) : 0
   const floorHeightFromLevelRailHeadsTitleValue = Number(floorHeightFromLevelRailHeadsTitle?.value) > 0 ? Number(floorHeightFromLevelRailHeadsTitle?.value) : 0
   const heightCenterGravityFromLevelRailHeadsTitleValue = Number(heightCenterGravityFromLevelRailHeadsTitle?.value) > 0 ? Number(heightCenterGravityFromLevelRailHeadsTitle?.value) : 0
@@ -40,6 +42,7 @@ calcButton.addEventListener('click', async () => {
 
   let values = (
     floorLengthValue &&
+    floorWidthValue &&
     tareWeightValue &&
     floorHeightFromLevelRailHeadsTitleValue &&
     heightCenterGravityFromLevelRailHeadsTitleValue &&
@@ -49,6 +52,7 @@ calcButton.addEventListener('click', async () => {
   if(values && cargoArray.length) {
     const request = {
       floor_length: floorLengthValue,
+      floor_width: floorWidthValue,
       tare_weight: tareWeightValue,
       floor_height_from_level_rail_heads: floorHeightFromLevelRailHeadsTitleValue,
       height_center_gravity_from_level_rail_heads: heightCenterGravityFromLevelRailHeadsTitleValue,
