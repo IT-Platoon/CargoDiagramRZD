@@ -9,8 +9,8 @@ class CargoItem(BaseModel):
     height: float
     quantity: int
     weight: int
-    delta_length: int
-    delta_width: int
+    delta_length: Optional[int]
+    delta_width: Optional[int]
 
 
 class CalculateRequest(BaseModel):

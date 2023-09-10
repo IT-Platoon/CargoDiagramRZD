@@ -54,11 +54,11 @@ async def calculate_centers_of_mass(body: CalculateRequest) -> dict:
     # Пункт 1.
     # Продольное смещение грузов в вагоне - в мм.
     longitudinal_displacement_in_car = 0.5 * body.floor_length - \
-        (sum(map(lambda x: x.weight * x.delta, body.cargo)) / weightSum)
+        (sum(map(lambda x: x.weight * x.delta_length, body.cargo)) / weightSum)
 
     # Продольное смещение грузов с вагоном - в мм.
     longitudinal_displacement_with_car = 0.5 * body.floor_length - \
-        (sum(map(lambda x: x.weight * x.delta, body.cargo)) \
+        (sum(map(lambda x: x.weight * x.delta_length, body.cargo)) \
         + body.tare_weight * body.floor_length / 2) / (weightSum + body.tare_weight)
 
     # Поперечное смещение в вагоне - в мм.
