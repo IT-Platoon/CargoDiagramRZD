@@ -134,10 +134,10 @@ cargoAdd.addEventListener('click', async () => {
     item.appendChild(document.createTextNode(info))
     cargoList.appendChild(item)
 
-    cargoLength.value = 0
-    cargoWidth.value = 0
-    cargoHeight.value = 0
-    cargoWeight.value = 0
-    cargoQuantity.value = 0
+    cargoLength.value = 1000
+    cargoWidth.value = 1000
+    cargoHeight.value = 1000
+    cargoWeight.value = 1
+    cargoQuantity.value = 1
   }
 });

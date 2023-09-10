@@ -1,6 +1,7 @@
 import copy
 
 from app.schemas import CalculateRequest
+from .check_delta_length import *
 from .model import Optimize
 
 
@@ -55,6 +56,13 @@ async def calculate_centers_of_mass(body: CalculateRequest) -> dict:
     # Продольное смещение грузов в вагоне - в мм.
     longitudinal_displacement_in_car = 0.5 * body.floor_length - \
         (sum(map(lambda x: x.weight * x.delta_length, body.cargo)) / weightSum)
+
+    # Допускаемое значение продольного смещения для грузов.
+    _perm_long = find_long_crit(perm_long_disp, weightSum)
+    if longitudinal_displacement_in_car < _perm_long:
+        longitudinal_displacement_flag = 'Продольное смещение допустимо.'
+    else:
+        longitudinal_displacement_flag = 'Продольное смещение не допустимо, не получилось найти оптимальное расположение.'
 
     # Продольное смещение грузов с вагоном - в мм.
     longitudinal_displacement_with_car = 0.5 * body.floor_length - \
@@ -111,6 +119,7 @@ async def calculate_centers_of_mass(body: CalculateRequest) -> dict:
 
     return {
         'longitudinal_displacement_in_car': round(longitudinal_displacement_in_car, 3),  # В мм
+        'longitudinal_displacement_flag': longitudinal_displacement_flag,  # text-формат.
         'longitudinal_displacement_with_car': round(longitudinal_displacement_with_car, 3),  # В мм
         'lateral_displacement_in_car': round(lateral_displacement_in_car, 3),  # в мм
         'lateral_displacement_with_car': round(lateral_displacement_with_car, 3),  # в мм
