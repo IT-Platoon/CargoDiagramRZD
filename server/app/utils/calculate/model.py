@@ -43,7 +43,7 @@ class Optimize:
         # Единственный ящик инициализирую в центре по ширине и длине.
         if len(copy_cargo) == 1:
             copy_cargo[0].delta_length = self._floor_length / 2 - copy_cargo[0].length / 2
-            copy_cargo[0].delta_width = self._floor_width / 2 - copy_cargo[0].width / 2
+            copy_cargo[0].delta_width = self._floor_width - copy_cargo[0].width / 2
 
         else:
 
@@ -53,7 +53,7 @@ class Optimize:
                 copy_cargo[idx].delta_length = random.randint(prev_border, prev_border + self._free_L_for_one_cargo - 1)
 
                 # Всегда начинаем с центра ширины.
-                copy_cargo[idx].delta_width = self._floor_width / 2 - copy_cargo[idx].width / 2
+                copy_cargo[idx].delta_width = self._floor_width - copy_cargo[idx].width / 2
     
                 # Обновляем левую границу.
                 prev_border = prev_border + item.length + self._free_L_for_one_cargo
@@ -123,33 +123,33 @@ class Optimize:
 
                         # Проверки на не наложение одного груза на другой.
                         # Нулевый элемент не выходит за пределы платформы слева.
-                        if k == 0:
-                            if left_step_cargo[k].delta_length >= 0:
-                                # проверка
+                        if left_step_cargo[k].delta_length >= 0:
+                            # проверка
+                            if k == 0:
                                 if self._check_best_cargo(left_step_cargo, True):
                                     copy_cargo = self.best_cargo
                                     flag_work_epoch = True
+                            else:
+                                # Проверка на не наложение правого груза на левый. 
+                                if left_step_cargo[k].delta_length > left_step_cargo[k-1].delta_length + left_step_cargo[k-1].length:
+                                    if self._check_best_cargo(left_step_cargo, True):
+                                        copy_cargo = self.best_cargo
+                                        flag_work_epoch = True
 
-                        # Последний элемент не выходит за пределы платформы справа.
-                        elif k == len(copy_cargo) - 1:
-                            if right_step_cargo[k].delta_length + right_step_cargo[k].length < self._floor_length:
-                                # проверка
+                        # Проверка на шаг вправо.
+                        if right_step_cargo[k].delta_length + right_step_cargo[k].length < self._floor_length:
+                            
+                            if k == len(copy_cargo) - 1:
                                 if self._check_best_cargo(right_step_cargo, True):
                                     copy_cargo = self.best_cargo
                                     flag_work_epoch = True
 
-                        else:
-                            # Проверка на не наложение правого груза на левый. 
-                            if left_step_cargo[k].delta_length > left_step_cargo[k-1].delta_length + left_step_cargo[k-1].length:
-                                if self._check_best_cargo(left_step_cargo, True):
-                                    copy_cargo = self.best_cargo
-                                    flag_work_epoch = True
-
-                            # Проверка на не наложение левого груза на превый. 
-                            if right_step_cargo[k].delta_length + right_step_cargo[k].length < right_step_cargo[k+1].delta_length:
-                                if self._check_best_cargo(right_step_cargo, True):
-                                    copy_cargo = self.best_cargo
-                                    flag_work_epoch = True
+                            else:
+                                # Проверка на не наложение левого груза на превый. 
+                                if right_step_cargo[k].delta_length + right_step_cargo[k].length < right_step_cargo[k+1].delta_length:
+                                    if self._check_best_cargo(right_step_cargo, True):
+                                        copy_cargo = self.best_cargo
+                                        flag_work_epoch = True
 
                 # Эпохи для поперечной оптимизации.
                 flag_work_epoch = True
@@ -160,19 +160,19 @@ class Optimize:
                     for k in range(len(copy_cargo)):
     
                         bottom_step_cargo = [copy.deepcopy(item) for item in copy_cargo]
-                        bottom_step_cargo[k].delta_width += self._step
+                        bottom_step_cargo[k].delta_width -= self._step
 
                         top_step_cargo = [copy.deepcopy(item) for item in copy_cargo]
-                        top_step_cargo[k].delta_width -= self._step
+                        top_step_cargo[k].delta_width += self._step
 
                         # Проверки на то, чтобы груз не выходил на пределы платформы по бокам.
-                        if bottom_step_cargo[k].delta_width >= 0 and bottom_step_cargo[k].delta_width + bottom_step_cargo[k].width < self._floor_width:
+                        if bottom_step_cargo[k].delta_width >= 0:
                             # проверка
                             if self._check_best_cargo(bottom_step_cargo, False):
                                 copy_cargo = self.best_cargo
                                 flag_work_epoch = True
  
-                        if top_step_cargo[k].delta_width >= 0 and top_step_cargo[k].delta_width + top_step_cargo[k].width < self._floor_width:
+                        if top_step_cargo[k].delta_width + top_step_cargo[k].width < self._floor_width:
                             # проверка
                             if self._check_best_cargo(top_step_cargo, False):
                                 copy_cargo = self.best_cargo

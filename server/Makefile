@@ -41,7 +41,7 @@ format:  ##@Code Reformat code with isort and black
 	poetry run python3 -m black $(CODE)
 
 run:  ##@Application Run application server
-	uvicorn $(APPLICATION_NAME).__main__:app --host ${APP_HOST} --port ${APP_PORT} --reload --timeout-keep-alive 60
+	uvicorn $(APPLICATION_NAME).__main__:app --host ${APP_HOST} --port ${APP_PORT} --reload --timeout-keep-alive 600
 
 %::
 	echo $(MESSAGE)
